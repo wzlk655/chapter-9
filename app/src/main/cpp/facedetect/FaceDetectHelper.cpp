@@ -120,6 +120,7 @@ FaceDetectHelper::detectFace(const unsigned char *image, int pixelFormat, int wi
                     bef_face_106 item = pFaceInfo.base_infos[i];
                     LOGD("byted_effect_face_detect face info action : %d - %d", i, item.action);
                     if (item.action > 0) {
+                        //TODO: add face rect point
                         mDetectFaceCallback(item.action);
                     }
                 }

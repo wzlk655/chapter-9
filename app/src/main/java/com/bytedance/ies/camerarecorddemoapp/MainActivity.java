@@ -60,6 +60,9 @@ public class MainActivity extends Activity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        //TODO:
+                        // 1 将人脸表情等通过ICON展示在UI上面
+                        // 2 增加人脸位置返回值之后，通过方框的图在UI上面现实人脸区域
                         tv.setText(ret + "");
                     }
                 });

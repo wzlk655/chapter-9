@@ -67,6 +67,7 @@ public class FaceDetectHelper {
         }
     }
 
+    //TODO: add fact rect points through the params in the callback
     public static void nativeOnFaceDetectedCallback(int ret) {
         Log.d("FaceDetectHelper", "JAVA detectFaceCallbackMethod ret : " + ret);
         if (mHelper != null) {

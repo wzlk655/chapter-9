@@ -10,6 +10,7 @@
 #include <string>
 #include <functional>
 #include <malloc.h>
+#include <pthread.h>
 #include "../include/log.h"
 #include "../include/TEUtils.h"
 
