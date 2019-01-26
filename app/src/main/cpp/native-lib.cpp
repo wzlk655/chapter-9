@@ -2,8 +2,9 @@
 #include <string>
 #include <cstdlib>
 #include "include/log.h"
-#include "FaceDetectHelper.h"
+#include "facedetect/FaceDetectHelper.h"
 #include "include/libyuv/convert_argb.h"
+#include "facedetect/FaceDetectHelper.h"
 
 using namespace std;
 
@@ -85,7 +86,7 @@ Java_com_bytedance_ies_camerarecorddemoapp_FaceDetectHelper_nativeInit(JNIEnv *e
 
     if (faceDetectHelperClass != NULL) {
         detectFaceCallbackMethod = env->GetStaticMethodID(faceDetectHelperClass,
-                                                          "nativeOnFaceDetectedCallback", "(I)V");
+                                                          "nativeOnFaceDetectedCallback", "(IIIII)V");
         if (detectFaceCallbackMethod == NULL) {
             LOGE("detectFaceCallbackMethod NULL");
         } else {
@@ -97,11 +98,11 @@ Java_com_bytedance_ies_camerarecorddemoapp_FaceDetectHelper_nativeInit(JNIEnv *e
 
     if (mFaceDetectHelper == NULL) {
         mFaceDetectHelper = new FaceDetectHelper();
-        mFaceDetectHelper->setDetectFaceCallback([](int ret) {
+        mFaceDetectHelper->setDetectFaceCallback([](int ret, int b, int l,int t,int r) {
             JNIEnv *_env = Android_JNI_GetEnv();
             if (_env != NULL && detectFaceCallbackMethod && mObj != NULL) {
                 LOGD("jni detectFaceCallbackMethod ret : %d", ret);
-                _env->CallStaticVoidMethod((jclass) mObj, detectFaceCallbackMethod, ret);
+                _env->CallStaticVoidMethod((jclass) mObj, detectFaceCallbackMethod, ret, b, l, t, r);
             }
         });
     }
@@ -123,6 +124,7 @@ Java_com_bytedance_ies_camerarecorddemoapp_FaceDetectHelper_nativeDetectFace(JNI
     int length = width * height * 4;
     unsigned char *rgbBuf = (unsigned char *) malloc(length);
 
+    //转换LUV为RGB
     libyuv::NV21ToARGB(data, width, data + width * height, width, rgbBuf, width * 4, width, height);
 
 //    for (int iHeight = 0; iHeight < height; iHeight++) {

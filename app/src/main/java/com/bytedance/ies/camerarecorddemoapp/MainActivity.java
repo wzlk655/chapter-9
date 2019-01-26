@@ -8,12 +8,15 @@ import android.graphics.ImageFormat;
 import android.hardware.Camera;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.PermissionChecker;
@@ -22,6 +25,7 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.util.List;
 
+import static android.R.attr.breadCrumbShortTitle;
 import static android.R.attr.targetSdkVersion;
 
 public class MainActivity extends Activity {
@@ -29,6 +33,7 @@ public class MainActivity extends Activity {
     private static final String TAG = "GLMainActivity";
 
     private TextView tv;
+    private ImageView iv;
     private Camera mCamera;
     private int mPreviewImgTime;
     private SurfaceHolder.Callback mSurfaceCallback;
@@ -39,6 +44,7 @@ public class MainActivity extends Activity {
     private ProgressDialog dialog;
     private Button mCopyModeButton;
     private Button mWriteBMPButton;
+    private FrameLayout mFrameLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,18 +58,48 @@ public class MainActivity extends Activity {
         // Example of a call to a native method
         tv = (TextView) findViewById(R.id.sample_text);
         tv.setText("ooo");
+        iv = findViewById(R.id.iv);
+        mFrameLayout = findViewById(R.id.f_layout);
 
         FaceDetectHelper.getHelper().setLicense("TvEbeOPnOCXa62ql1AgSpWADbsODeYUfAz5eo8P+KJPxmD42PeH+UDg1kweybbeXzb3Yj0IHcOtNXMkijk7uJ0n9QS4FnB4Kvp2iKnFDEJ+/wdqGfasiA/3vbvpSakJ79sZG/zt8pMESgPrmaBh59OoMZMpfwAFcibdc/b38KNU=");
         FaceDetectHelper.getHelper().setFaceDetectedCallback(new FaceDetectHelper.OnFaceDetectedCallback() {
             @Override
-            public void onFaceDetected(final int ret) {
+            public void onFaceDetected(final int ret,final int b,final int l,final int t,final int r) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         //TODO:
                         // 1 将人脸表情等通过ICON展示在UI上面
                         // 2 增加人脸位置返回值之后，通过方框的图在UI上面现实人脸区域
-                        tv.setText(ret + "");
+                        //tv.setText(ret + "");
+                        tv.setText("Face");
+                        DisplayMetrics dm = getResources().getDisplayMetrics();
+                        int sWidth = dm.widthPixels;
+                        int sHeight = dm.heightPixels;
+                        float scale = Math.min(sWidth/720f,sHeight/720f);
+                        int left = (int)(sWidth-scale*b);
+                        int top = (int)(scale*l);
+                        int right = (int)(scale*t);
+                        int bottom = (int)(sHeight-scale*r);
+                        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) tv.getLayoutParams();
+                        if(left>=0&&top>=0&&right>=0&&bottom>=0)
+                            params.setMargins(left,top,right,bottom);
+                        switch (ret){
+                            case(2):
+                                iv.setImageResource(R.drawable.blink);break;
+                            case(4):
+                                iv.setImageResource(R.drawable.mouthopen);break;
+                            case(8):
+                                iv.setImageResource(R.drawable.shakehead);break;
+                            case(16):
+                                iv.setImageResource(R.drawable.nod);
+                            case(32):
+                                iv.setImageResource(R.drawable.wiggle);break;
+                            case(64):
+                                iv.setImageResource(R.drawable.pout);break;
+                            default:
+                                break;
+                        }
                     }
                 });
             }

@@ -2,6 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/f_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
@@ -13,9 +14,9 @@
 
     <TextView
         android:id="@+id/sample_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:layout_width="159dp"
+        android:layout_height="197dp"
+        android:background="@drawable/textview_border"
         android:text="Hello World!" />
 
     <Button
@@ -31,5 +32,13 @@
         android:layout_height="wrap_content"
         android:layout_gravity="right"
         android:text="写BMP文件" />
+
+    <ImageView
+        android:id="@+id/iv"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="580dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/pout" />
 
 </FrameLayout>
